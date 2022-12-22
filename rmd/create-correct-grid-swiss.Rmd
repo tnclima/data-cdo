@@ -1,0 +1,106 @@
+---
+title: "create correct grid for swiss dataset"
+output: html_document
+date: "2022-12-01"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(reticulate)
+library(here)
+library(terra)
+library(RNetCDF)
+# use_condaenv("cdo")
+```
+
+```{python}
+import os
+import glob
+from cdo import Cdo
+cdo = Cdo()
+```
+
+
+Different grids for temperature and precipitation require different setgrids.
+
+Subset original grids with CDO.
+
+```{python}
+file_input = "/home/climatedata/obs/SWISS/TabsD_ch02.lonlat_1961-2021.nc"
+file_output = "/home/climatedata/obs/SWISS/tempfile_tas.nc"
+cdo.seltimestep("1/30", input=file_input, output=file_output)
+
+file_input = "/home/climatedata/obs/SWISS/RhiresD_ch02h.lonlat_1961-2021.nc"
+file_output = "/home/climatedata/obs/SWISS/tempfile_precip.nc"
+cdo.seltimestep("1/30", input=file_input, output=file_output)
+
+```
+
+Rewrite grid with terra package.
+
+
+```{r}
+rs <- rast(here("/home/climatedata/obs/SWISS/tempfile_tas.nc"))
+# rs
+# time(rs)
+
+writeCDF(rs, "/home/climatedata/obs/SWISS/tempfile_tas2.nc",
+         varname = "temperature", unit = "C", overwrite = TRUE)
+
+# clean attributes
+ncobj <- open.nc("/home/climatedata/obs/SWISS/tempfile_tas2.nc", write = T)
+# att.get.nc(ncobj, "time", "calendar")
+att.get.nc(ncobj, "temperature", "grid_mapping")
+att.delete.nc(ncobj, "temperature", "grid_mapping")
+close.nc(ncobj)
+
+```
+
+
+```{r}
+rs <- rast(here("/home/climatedata/obs/SWISS/tempfile_precip.nc"))
+# rs
+# time(rs)
+
+writeCDF(rs, "/home/climatedata/obs/SWISS/tempfile_precip2.nc",
+         varname = "precipitation", unit = "mm", overwrite = TRUE)
+
+# clean attributes
+ncobj <- open.nc("/home/climatedata/obs/SWISS/tempfile_precip2.nc", write = T)
+# att.get.nc(ncobj, "time", "calendar")
+att.get.nc(ncobj, "precipitation", "grid_mapping")
+att.delete.nc(ncobj, "precipitation", "grid_mapping")
+close.nc(ncobj)
+
+```
+
+Invert lat needed for terra - netcdf stuff
+
+
+
+
+```{python}
+file_input = "/home/climatedata/obs/SWISS/tempfile_tas2.nc"
+file_output = "/home/climatedata/obs/SWISS/correct_grid_temperature.nc"
+cdo.invertlat(input=file_input, output=file_output)
+
+file_input = "/home/climatedata/obs/SWISS/tempfile_precip2.nc"
+file_output = "/home/climatedata/obs/SWISS/correct_grid_precipitation.nc"
+cdo.invertlat(input=file_input, output=file_output)
+
+```
+
+
+
+Remove tempfiles
+
+```{r}
+fs::file_delete("/home/climatedata/obs/SWISS/tempfile_tas.nc")
+fs::file_delete("/home/climatedata/obs/SWISS/tempfile_tas2.nc")
+fs::file_delete("/home/climatedata/obs/SWISS/tempfile_precip.nc")
+fs::file_delete("/home/climatedata/obs/SWISS/tempfile_precip2.nc")
+```
+
+
+
+

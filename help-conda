@@ -1,0 +1,10 @@
+# create new conda environment
+conda create -n cdo -c conda-forge python-cdo xarray netcdf4
+
+# activate environment
+conda activate cdo
+
+# or with gdal
+conda create -n cdo_gdal -c conda-forge python-cdo xarray netcdf4 gdal
+
+
