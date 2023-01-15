@@ -10,6 +10,18 @@ file_template = "/home/climatedata/obs/regrid_data/template_rotpole_eurocordex/p
 # to convert tif to netcdf: use gdal in shell
 # gdal_translate -of NetCDF infile outfile
 
+# apgd ----------------------------------------- #
+
+# setgrid first
+file_input = "/home/climatedata/obs/orography/apgd_height.nc"
+file_output = "/home/climatedata/obs/orography/apgd_height_setgrid.nc"
+cdo.setgrid("/home/climatedata/obs/APGD/APGD_laea_vertices.nc",
+            input=file_input, output=file_output)
+
+file_input = "/home/climatedata/obs/orography/apgd_height_setgrid.nc"
+file_output = "/home/climatedata/obs/regrid_data/orography/apgd_rg.nc"
+cdo.remapbil(file_template, input=file_input, output=file_output)
+
 # crespi ----------------------------------------- #
 
 file_input = "/home/climatedata/obs/orography/crespi_1km_precipitation.nc"
