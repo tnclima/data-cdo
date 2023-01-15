@@ -12,10 +12,15 @@ file_template = "/home/climatedata/obs/regrid_data/template_rotpole_eurocordex/p
 
 # apgd ----------------------------------------- #
 
-# setgrid first
+# setgrid first (and remove the added time dimension)
 file_input = "/home/climatedata/obs/orography/apgd_height.nc"
 file_output = "/home/climatedata/obs/orography/apgd_height_setgrid.nc"
 cdo.setgrid("/home/climatedata/obs/APGD/APGD_laea_vertices.nc",
+            input=file_input, output=file_output)
+
+file_input = "/home/climatedata/obs/orography/apgd_height_setgrid.nc"
+file_output = "/home/climatedata/obs/orography/apgd_height_setgrid_notime.nc"
+cdo.copy("--reduce_dim",
             input=file_input, output=file_output)
 
 file_input = "/home/climatedata/obs/orography/apgd_height_setgrid.nc"
