@@ -20,10 +20,10 @@ cdo.setgrid("/home/climatedata/obs/APGD/APGD_laea_vertices.nc",
 
 file_input = "/home/climatedata/obs/orography/apgd_height_setgrid.nc"
 file_output = "/home/climatedata/obs/orography/apgd_height_setgrid_notime.nc"
-cdo.copy("--reduce_dim",
-            input=file_input, output=file_output)
+cdo.copy(options="--reduce_dim",
+         input=file_input, output=file_output)
 
-file_input = "/home/climatedata/obs/orography/apgd_height_setgrid.nc"
+file_input = "/home/climatedata/obs/orography/apgd_height_setgrid_notime.nc"
 file_output = "/home/climatedata/obs/regrid_data/orography/apgd_rg.nc"
 cdo.remapbil(file_template, input=file_input, output=file_output)
 
