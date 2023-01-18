@@ -10,9 +10,9 @@ file_template = "/home/climatedata/obs/regrid_data/template_rotpole_eurocordex/p
 # clim - temp
 
 file_input = "/home/climatedata/obs/CRESPI/daily_250m_lonlat/Climatologies_1981_2010_MonthlyMeanTemp.nc"
-file_output = "/home/climatedata/obs/regrid_data/CRESPI/daily_250m/Climatologies_1981_2010_MonthlyMeanTemp_rg.nc"
+file_output = "/home/climatedata/obs/regrid_data/CRESPI/Climatologies_1981_2010_MonthlyMeanTemp_rg.nc"
 
-cdo.remapbil(file_template, input=file_input, output=file_output)
+cdo.remapcon(file_template, input=file_input, output=file_output)
 
 # clim - prec
 
@@ -52,10 +52,10 @@ cdo.mergetime(input=file_input, output=file_output)
 
 file_input = "/home/climatedata/obs/CRESPI/daily_250m_lonlat/DailySeries_1980_2018_Prec.nc"
 file_output = "/home/climatedata/obs/regrid_data/CRESPI/daily_250m/DailySeries_1980_2018_Prec_rg.nc"
-cdo.remapbil(file_template, input=file_input, output=file_output)
+cdo.remapcon(file_template, input=file_input, output=file_output)
 
 
 file_input = "/home/climatedata/obs/CRESPI/daily_250m_lonlat/DailySeries_1980_2018_MeanTemp.nc"
-file_output = "/home/climatedata/obs/regrid_data/CRESPI/daily_250m/DailySeries_1980_2018_MeanTemp_rg.nc"
+file_output = "/home/climatedata/obs/regrid_data/CRESPI/DailySeries_1980_2018_MeanTemp_rg.nc"
 cdo.remapcon(file_template, input=file_input, output=file_output)
 

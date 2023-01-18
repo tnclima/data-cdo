@@ -25,30 +25,30 @@ cdo.copy(options="--reduce_dim",
 
 file_input = "/home/climatedata/obs/orography/apgd_height_setgrid_notime.nc"
 file_output = "/home/climatedata/obs/regrid_data/orography/apgd_rg.nc"
-cdo.remapbil(file_template, input=file_input, output=file_output)
+cdo.remapcon(file_template, input=file_input, output=file_output)
 
 # crespi ----------------------------------------- #
 
 file_input = "/home/climatedata/obs/orography/crespi_1km_precipitation.nc"
 file_output = "/home/climatedata/obs/regrid_data/orography/crespi_1km_precipitation_rg.nc"
-cdo.remapbil(file_template, input=file_input, output=file_output)
+cdo.remapcon(file_template, input=file_input, output=file_output)
 
 file_input = "/home/climatedata/obs/orography/crespi_1km_temperature.nc"
 file_output = "/home/climatedata/obs/regrid_data/orography/crespi_1km_temperature_rg.nc"
-cdo.remapbil(file_template, input=file_input, output=file_output)
+cdo.remapcon(file_template, input=file_input, output=file_output)
 
 
 # eobs ----------------------------------------- #
 
 file_input = "/home/climatedata/obs/orography/eobs_elev_0.1deg_reg_v26.0e.nc"
 file_output = "/home/climatedata/obs/regrid_data/orography/eobs_elev_0.1deg_reg_v26.0e_rg.nc"
-cdo.remapbil(file_template, input=file_input, output=file_output)
+cdo.remapcon(file_template, input=file_input, output=file_output)
 
 # eu-dem ----------------------------------------- #
 
 file_input = "/home/climatedata/obs/orography/eu_dem_gar_1km.nc"
 file_output = "/home/climatedata/obs/regrid_data/orography/eu_dem_gar_1km_rg.nc"
-cdo.remapbil(file_template, input=file_input, output=file_output)
+cdo.remapcon(file_template, input=file_input, output=file_output)
 
 
 
@@ -58,22 +58,22 @@ cdo.remapbil(file_template, input=file_input, output=file_output)
 
 file_input = "/home/climatedata/obs/orography/histalp_elevation_temperature.nc"
 file_output = "/home/climatedata/obs/regrid_data/orography/histalp_elevation_temperature_rg.nc"
-cdo.remapbil(file_template, input=file_input, output=file_output)
+cdo.remapcon(file_template, input=file_input, output=file_output)
 
 
 # laprec ----------------------------------------- #
 
 file_input = "/home/climatedata/obs/orography/laprec_dem.nc"
 file_output = "/home/climatedata/obs/regrid_data/orography/laprec_dem_rg.nc"
-cdo.remapbil(file_template, input=file_input, output=file_output)
+cdo.remapcon(file_template, input=file_input, output=file_output)
 
 
 
 # mesan ----------------------------------------- #
 
-file_input = "/home/climatedata/obs/orography/MESAN_GAR_orography.nc"
+file_input = "/home/climatedata/obs/orography/MESAN_GAR_orography_vertices.nc"
 file_output = "/home/climatedata/obs/regrid_data/orography/MESAN_GAR_orography_rg.nc"
-cdo.remapbil(file_template, input=file_input, output=file_output)
+cdo.remapcon(file_template, input=file_input, output=file_output)
 
 
 
@@ -81,7 +81,7 @@ cdo.remapbil(file_template, input=file_input, output=file_output)
 
 file_input = "/home/climatedata/obs/orography/topo.swiss02_ch02.lonlat.nc"
 file_output = "/home/climatedata/obs/regrid_data/orography/topo.swiss02_ch02.lonlat_rg.nc"
-cdo.remapbil(file_template, input=file_input, output=file_output)
+cdo.remapcon(file_template, input=file_input, output=file_output)
 
 
 
