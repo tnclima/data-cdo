@@ -51,7 +51,7 @@ cdo.mergetime(input=file_input, output=file_output)
 # remap
 
 file_input = "/home/climatedata/obs/CRESPI/daily_250m_lonlat/DailySeries_1980_2018_Prec.nc"
-file_output = "/home/climatedata/obs/regrid_data/CRESPI/daily_250m/DailySeries_1980_2018_Prec_rg.nc"
+file_output = "/home/climatedata/obs/regrid_data/CRESPI/DailySeries_1980_2018_Prec_rg.nc"
 cdo.remapcon(file_template, input=file_input, output=file_output)
 
 
