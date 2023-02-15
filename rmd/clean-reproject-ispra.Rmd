@@ -1,0 +1,95 @@
+---
+title: "reproject and clean ispra files"
+output: html_document
+date: "2023-02-15"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# library(reticulate)
+library(here)
+# library(terra)
+library(stars)
+library(magrittr)
+library(fs)
+# use_condaenv("cdo")
+```
+
+```{python}
+import os
+import glob
+from cdo import Cdo
+cdo = Cdo()
+```
+
+
+# First reproject all files to LAEA and save as netcdf
+
+
+```{r}
+files_asc <- dir_ls("/home/climatedata/obs/ISPRA/", recurse = T, regexp = "[.]asc$")
+
+reproj <- function(path_out, tempid){
+  dir_create(path_out)
+  files_asc_sub <- stringr::str_subset(files_asc, tempid)
+  
+  
+for(i_fn in files_asc_sub){
+  
+  file_out <- path(path_out, path_file(i_fn)) %>% path_ext_set("nc")
+  if(file_exists(file_out)) next
+  
+  rr <- read_stars(i_fn)
+  st_crs(rr) <- 23032
+  rr_laea <- st_warp(rr, crs = 3035)
+  
+  write_stars(rr_laea, file_out)
+  
+}
+}
+
+reproj("/home/climatedata/obs/ISPRA/ncdf/tmin", "MINIMA")
+reproj("/home/climatedata/obs/ISPRA/ncdf/tmean", "MEDIA")
+reproj("/home/climatedata/obs/ISPRA/ncdf/tmax", "MASSIMA")
+
+
+```
+
+
+# set date information in each netcdf file
+
+
+```{python}
+path_in = "/home/climatedata/obs/ISPRA/ncdf/"
+all_vars = ["tmin","tmean","tmax"]
+
+it_months = ["GENNAIO", "FEBBRAIO", "MARZO", "APRILE", "MAGGIO", "GIUGNO",
+             "LUGLIO", "AGOSTO", "SETTEMBRE", "OTTOBRE", "NOVEMBRE", "DICEMBRE"]
+
+for var in all_vars:
+  all_files = os.listdir(os.path.join(path_in, var))
+  # file_in = all_files[0]
+  
+  for file_in in all_files:
+    mo = it_months.index(file_in.split("_")[2]) + 1
+    yy = int(file_in.split("_")[3][:-3])
+    
+    file_out = os.path.join(path_in, "%s_%4d-%02d-15.nc" % (var, yy, mo))
+    if not os.path.exists(file_out):
+      chain_in = "-setyear,%d -setmon,%d -setday,15 %s" % (yy, mo, os.path.join(path_in, var, file_in))
+      cdo.settunits("months", input=chain_in, output=file_out)
+
+```
+
+
+
+# mergetime
+
+
+```{python}
+for var in ["tmin","tmean","tmax"]:
+  file_out = "/home/climatedata/obs/ISPRA/ispra_" + var + ".nc"
+  cdo.mergetime(input=glob.glob("/home/climatedata/obs/ISPRA/ncdf/" + var + "_*"), output=file_out)
+
+```
+

@@ -5,6 +5,7 @@ from cdo import Cdo
 
 cdo = Cdo()
 
+cdo.env = {"REMAP_AREA_MIN" : "0.95"}
 file_template = "/home/climatedata/obs/regrid_data/template_rotpole_eurocordex/pr_EUR-11_CNRM-CERFACS-CNRM-CM5_historical_r1i1p1_CLMcom-CCLM4-8-17_v1_day_19500101-19501231.nc"
 
 # clim - temp
@@ -17,7 +18,7 @@ cdo.remapcon(file_template, input=file_input, output=file_output)
 # clim - prec
 
 file_input = "/home/climatedata/obs/CRESPI/daily_250m_lonlat/Climatologies_1981_2010_MonthlyTotPrec.nc"
-file_output = "/home/climatedata/obs/regrid_data/CRESPI/daily_250m/Climatologies_1981_2010_MonthlyTotPrec_rg.nc"
+file_output = "/home/climatedata/obs/regrid_data/CRESPI/Climatologies_1981_2010_MonthlyTotPrec_rg.nc"
 
 cdo.remapcon(file_template, input=file_input, output=file_output)
 
@@ -59,3 +60,4 @@ file_input = "/home/climatedata/obs/CRESPI/daily_250m_lonlat/DailySeries_1980_20
 file_output = "/home/climatedata/obs/regrid_data/CRESPI/DailySeries_1980_2018_MeanTemp_rg.nc"
 cdo.remapcon(file_template, input=file_input, output=file_output)
 
+# clean up manually!
