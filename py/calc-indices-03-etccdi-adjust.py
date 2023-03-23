@@ -39,7 +39,8 @@ calc_index("tasmaxAdjust", "SU_annual", cdo.etccdi_su)
 calc_index("prAdjust", "CDD_annual", cdo.etccdi_cdd)
 
 
-# SDII and RR1 destroy time information needs annual files
+# SDII and RR1 destroy time information, R95pTOT unclear
+# ---------------------------------------------------- #
 
 # SDII
 var_in = "prAdjust"
@@ -53,10 +54,10 @@ all_files_rcm = os.listdir(path_in_index)
 all_files_rcm.sort()
 for j,file_rcm in enumerate(all_files_rcm):
   file_in = os.path.join(path_in_index, file_rcm)
-  file_in = "-ifthen -gtc,1 -mulc,86400 " + file_in + " -mulc,86400 " + file_in
+  file_in_chain = "-ifthen -gtc,1 -mulc,86400 " + file_in + " -mulc,86400 " + file_in
   file_out = os.path.join(path_out_index, file_rcm)
   if not os.path.exists(file_out):
-    cdo.yearmean(input=file_in, output=file_out)
+    cdo.yearmean(input=file_in_chain, output=file_out)
 
 
 # RR1
@@ -72,10 +73,10 @@ all_files_rcm = os.listdir(path_in_index)
 all_files_rcm.sort()
 for j,file_rcm in enumerate(all_files_rcm):
   file_in = os.path.join(path_in_index, file_rcm)
-  file_in = "-gtc,1 -mulc,86400 " + file_in
+  file_in_chain = "-gtc,1 -mulc,86400 " + file_in
   file_out = os.path.join(path_out_index, file_rcm)
   if not os.path.exists(file_out):
-    cdo.yearsum(input=file_in, output=file_out)
+    cdo.yearsum(input=file_in_chain, output=file_out)
 
 
 
@@ -102,7 +103,7 @@ for j,file_rcm in enumerate(all_files_rcm):
     cdo.ifthen(input= "-gtc,1 -mulc,86400 " + file_in + " -mulc,86400 " + file_in, output=file_tmp_wd)
     cdo.timpctl(95, input=file_tmp_wd+" -timmin "+file_tmp_wd+" -timmax "+file_tmp_wd, output=file_tmp_wd_p95)
     cdo.ifthen(input="-gt "+file_tmp_wd+" "+file_tmp_wd_p95+ " "+file_tmp_wd,output=file_tmp_wd_p95_gt)
-    cdo.div(input="-yearsum "+file_tmp_wd_p95_gt+" -yearsum -mulc,86400 "+file_in,output=file_out)
+    cdo.div(input="-yearsum -setmisstoc,0 "+file_tmp_wd_p95_gt+" -yearsum -mulc,86400 "+file_in,output=file_out)
 
 
 
