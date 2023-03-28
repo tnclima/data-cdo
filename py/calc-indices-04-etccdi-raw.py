@@ -44,9 +44,9 @@ def calc_index(var_in, var_out, cdo_fun):
 
 
 
-calc_index("tasmin", "ID_annual", cdo.etccdi_id)
+calc_index("tasmin", "FD_annual", cdo.etccdi_fd)
+calc_index("tasmax", "ID_annual", cdo.etccdi_id)
 calc_index("tasmin", "TR_annual", cdo.etccdi_tr)
-calc_index("tasmax", "FD_annual", cdo.etccdi_fd)
 calc_index("tasmax", "SU_annual", cdo.etccdi_su)
 calc_index("pr", "CDD_annual", cdo.etccdi_cdd)
 
