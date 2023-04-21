@@ -20,7 +20,7 @@ tmp_pct_seasmax = os.path.join(path_temp, "tmp_pct_seasmax.nc")
 all_variables = os.listdir(path_in)
 all_variables.sort()
 all_variables = [x for x in all_variables if x != "orog"]
-# all_variables = all_variables[0:4] # only a subset to start with
+# all_variables = ["tasminAdjust", "tasmaxAdjust"] # only a subset
 
 for i,var in enumerate(all_variables):
   

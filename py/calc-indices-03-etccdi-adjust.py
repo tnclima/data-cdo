@@ -33,13 +33,13 @@ def calc_index(var_in, var_out, cdo_fun):
 
 
 calc_index("tasminAdjust", "FD_annual", cdo.etccdi_fd)
-calc_index("tasmaxAdjust", "ID_annual", cdo.etccdi_id)
+# calc_index("tasmaxAdjust", "ID_annual", cdo.etccdi_id)
 calc_index("tasminAdjust", "TR_annual", cdo.etccdi_tr)
 calc_index("tasmaxAdjust", "SU_annual", cdo.etccdi_su)
 calc_index("prAdjust", "CDD_annual", cdo.etccdi_cdd)
 
 
-# SDII and RR1 destroy time information, R95pTOT unclear
+# SDII, RR1, and ID destroy time information, R95pTOT unclear
 # ---------------------------------------------------- #
 
 # SDII
@@ -79,6 +79,23 @@ for j,file_rcm in enumerate(all_files_rcm):
     cdo.yearsum(input=file_in_chain, output=file_out)
 
 
+
+# ID
+var_in = "tasmaxAdjust"
+var_out = "ID_annual"
+
+path_in_index = os.path.join(path_in, var_in)
+path_out_index = os.path.join(path_out, var_out)
+os.makedirs(path_out_index, exist_ok=True)
+
+all_files_rcm = os.listdir(path_in_index)
+all_files_rcm.sort()
+for j,file_rcm in enumerate(all_files_rcm):
+  file_in = os.path.join(path_in_index, file_rcm)
+  file_in_chain = "-ltc,273.15 " + file_in
+  file_out = os.path.join(path_out_index, file_rcm)
+  if not os.path.exists(file_out):
+    cdo.yearsum(input=file_in_chain, output=file_out)
 
 
 # R95pTOT
