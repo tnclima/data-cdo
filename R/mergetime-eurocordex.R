@@ -5,8 +5,8 @@ library(fs)
 library(magrittr)
 library(lubridate)
 
-path_in <- "/home/climatedata/eurocordex/split/"
-path_out <- "/home/climatedata/eurocordex/merged/"
+path_in <- "/home/climatedata/eurocordex2-rest/split/"
+path_out <- "/home/climatedata/eurocordex2-rest/merged/"
 
 dat_inv <- get_inventory(path_in, T)
 dat_inv$variable %>% table

@@ -6,9 +6,9 @@ from cdo import Cdo
 
 cdo = Cdo()
 
-path_in = "/home/climatedata/eurocordex/merged/"
-path_out = "/home/climatedata/eurocordex/indices_etccdi/"
-path_temp = "/home/climatedata/eurocordex/tmp/"
+path_in = "/home/climatedata/eurocordex2-rest/merged/"
+path_out = "/home/climatedata/eurocordex2-rest/indices_etccdi/"
+path_temp = "/home/climatedata/eurocordex2-rest/tmp/"
 os.makedirs(path_temp, exist_ok=True)
 tmp_merge_hist = os.path.join(path_temp, "tmp_merge_hist.nc")
 
@@ -68,7 +68,6 @@ for j,file_loop in enumerate(all_files_rcm_loop):
                               gcm in x and ens in x and rcm in x and ds in x][0])
     # update start date in filename
     file_rcm = file_loop[:-20] + file_hist[-20:-12] + file_loop[-12:]
-    cdo.mergetime(input=file_hist + " " + file_rcp, output=tmp_merge_hist)
     file_in = tmp_merge_hist
     
     # ID
@@ -76,6 +75,13 @@ for j,file_loop in enumerate(all_files_rcm_loop):
     path_out_index = os.path.join(path_out, var_out)
     os.makedirs(path_out_index, exist_ok=True)
     file_out = os.path.join(path_out_index, file_rcm)
+    
+    # skip rest of loop if first file exists
+    if os.path.exists(file_out):
+      continue
+    
+    cdo.mergetime(input=file_hist + " " + file_rcp, output=tmp_merge_hist)
+
     file_in_chain = "-ltc,273.15 " + file_in
     if not os.path.exists(file_out):
         cdo.yearsum(input=file_in_chain, output=file_out)
@@ -85,8 +91,6 @@ for j,file_loop in enumerate(all_files_rcm_loop):
 
 # SDII and RR1 destroy time information, R95pTOT unclear
 # ---------------------------------------------------- #
-
-quit() # stop execution here ?
 
 var_in = "pr"
 path_in_index = os.path.join(path_in, var_in)
@@ -104,10 +108,13 @@ for j,file_loop in enumerate(all_files_rcm_loop):
                               gcm in x and ens in x and rcm in x and ds in x][0])
     # update start date in filename
     file_rcm = file_loop[:-20] + file_hist[-20:-12] + file_loop[-12:]
-    cdo.mergetime(input=file_hist + " " + file_rcp, output=tmp_merge_hist)
     file_in = tmp_merge_hist
-    
-    
+
+    # skip rest of loop if first file exists
+    if os.path.exists(os.path.join(path_out, "R95pTOT_annual", file_rcm)):
+      continue    
+
+    cdo.mergetime(input=file_hist + " " + file_rcp, output=tmp_merge_hist)
 
     # SDII
     var_out = "SDII_annual"

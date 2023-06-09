@@ -5,9 +5,9 @@ from cdo import Cdo
 
 cdo = Cdo()
 
-path_in = "/home/climatedata/eurocordex/merged/"
-path_out = "/home/climatedata/eurocordex/indices/"
-path_temp = "/home/climatedata/eurocordex/tmp/"
+path_in = "/home/climatedata/eurocordex2-rest/merged/"
+path_out = "/home/climatedata/eurocordex2-rest/indices/"
+path_temp = "/home/climatedata/eurocordex2-rest/tmp/"
 
 pctl = [1, 5, 10, 50, 90, 95, 99]
 os.makedirs(path_temp, exist_ok=True)
@@ -50,11 +50,15 @@ for i,var in enumerate(all_variables):
       file_hist = os.path.join(path_in, var, 
                                [x for x in all_files_rcm_hist if 
                                 gcm in x and ens in x and rcm in x and ds in x][0])
-      cdo.mergetime(input=file_hist + " " + file_rcp, output=tmp_merge_hist)
-      file_in = tmp_merge_hist
       # update start date in filename
       file_rcm = file_loop[:-20] + file_hist[-20:-12] + file_loop[-12:]
       
+      # skip rest of loop if first file exists
+      if os.path.exists(os.path.join(path_mean_annual, file_rcm)):
+        continue
+        
+      cdo.mergetime(input=file_hist + " " + file_rcp, output=tmp_merge_hist)
+      file_in = tmp_merge_hist      
       
       file_out = os.path.join(path_mean_annual, file_rcm)
       if not os.path.exists(file_out):
