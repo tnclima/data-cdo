@@ -9,8 +9,11 @@ library(lubridate)
 
 source("R/functions/inventory_cmip5.R")
 
-path_in <- "/home/climatedata/cmip5/eurocordex-ensemble-daily/split/"
-path_out <- "/home/climatedata/cmip5/eurocordex-ensemble-daily/merged-europe/"
+# path_in <- "/home/climatedata/cmip5/eurocordex-ensemble-daily/split/"
+# path_out <- "/home/climatedata/cmip5/eurocordex-ensemble-daily/merged-europe/"
+
+path_in <- "/home/climatedata/cmip5/cmcc-cm-daily/split/"
+path_out <- "/home/climatedata/cmip5/cmcc-cm-daily/merged-europe/"
 
 dat_inv <- inventory_cmip5(path_in, T)
 
