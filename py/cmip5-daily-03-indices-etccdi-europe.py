@@ -41,7 +41,8 @@ def calc_index(var_in, var_out, cdo_fun):
         file_in = tmp_merge_hist   
         file_out = os.path.join(path_out_index, file_gcm)
         if not os.path.exists(file_out):
-            cdo.mergetime(input=file_hist + " " + file_rcp, output=tmp_merge_hist)
+            cdo.mergetime(input=" -seldate,1800-01-01,2005-12-31 " + file_hist + " " + file_rcp, 
+                          output=tmp_merge_hist)
             if var_in.startswith("pr"):
                 file_in = "-mulc,86400 " + file_in
             cdo_fun(input=file_in, output=file_out)
@@ -81,7 +82,8 @@ for j,file_loop in enumerate(all_files_gcm_loop):
     file_out = os.path.join(path_out_index, file_gcm)
     
     if not os.path.exists(file_out):
-        cdo.mergetime(input=file_hist + " " + file_rcp, output=tmp_merge_hist)
+        cdo.mergetime(input=" -seldate,1800-01-01,2005-12-31 " + file_hist + " " + file_rcp, 
+                      output=tmp_merge_hist)
 
         file_in_chain = "-ltc,273.15 " + file_in
         if not os.path.exists(file_out):
@@ -114,7 +116,8 @@ for j,file_loop in enumerate(all_files_gcm_loop):
     if os.path.exists(os.path.join(path_out, "R95pTOT_annual", file_gcm)):
         continue    
 
-    cdo.mergetime(input=file_hist + " " + file_rcp, output=tmp_merge_hist)
+    cdo.mergetime(input=" -seldate,1800-01-01,2005-12-31 " + file_hist + " " + file_rcp, 
+                  output=tmp_merge_hist)
 
     # SDII
     var_out = "SDII_annual"

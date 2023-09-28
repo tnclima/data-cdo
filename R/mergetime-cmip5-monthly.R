@@ -1,18 +1,18 @@
 # mergetime eurocordex
 
-# library(eurocordexr)
+library(eurocordexr)
 library(data.table)
 setDTthreads(4)
 library(fs)
 library(magrittr)
 library(lubridate)
 
-source("R/functions/inventory_cmip5.R")
+# source("R/functions/inventory_cmip5.R")
 
-path_in <- "/home/climatedata/temp-cmip5/tas/"
-path_out <- "/home/climatedata/cmip5/large-ensemble-monthly/"
+path_in <- "/home/climatedata/temp-cmip5/pr2/"
+path_out <- "/home/climatedata/cmip5/large-ensemble-monthly/merged/"
 
-dat_inv <- inventory_cmip5(path_in, T)
+dat_inv <- get_inventory_cmip5(path_in)
 
 dat_inv$variable %>% table
 dat_inv <- dat_inv[variable != "orog"]
@@ -31,6 +31,9 @@ dat_inv$total_simulation_years %>% table
 # not all ensembles have the full century
 dat_inv[year(date_end) > 2006 & year(date_end) < 2090]
 dat_inv[gcm == "MIROC5"]
+
+# does not have all historical (removed manually)
+dat_inv[gcm == "MIROC-ESM-CHEM"]
 
 
 

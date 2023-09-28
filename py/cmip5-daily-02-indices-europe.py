@@ -55,10 +55,11 @@ for i,var in enumerate(all_variables):
       file_gcm = file_loop[:-20] + file_hist[-20:-12] + file_loop[-12:]
       
       # skip rest of loop if first file exists
-      # if os.path.exists(os.path.join(path_mean_annual, file_gcm)):
-        # continue
+      if os.path.exists(os.path.join(path_mean_annual, file_gcm)):
+        continue
         
-      cdo.mergetime(input=file_hist + " " + file_rcp, output=tmp_merge_hist)
+      cdo.mergetime(input=" -seldate,1800-01-01,2005-12-31 " + file_hist + " " + file_rcp, 
+                    output=tmp_merge_hist)
       file_in = tmp_merge_hist      
       
       file_out = os.path.join(path_mean_annual, file_gcm)
