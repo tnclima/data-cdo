@@ -1,0 +1,140 @@
+---
+title: "reproject Crespi 1km data set to lonlat"
+output: html_document
+date: "2023-10-04"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# library(reticulate)
+library(here)
+library(terra)
+# library(stars)
+library(RNetCDF)
+library(magrittr)
+library(lubridate)
+library(fs)
+# use_condaenv("cdo")
+```
+
+```{python}
+import os
+import glob
+from cdo import Cdo
+cdo = Cdo()
+```
+
+
+# split years
+
+
+```{python}
+
+file_input = "/home/climatedata/obs/CRESPI/daily_1km/DailySeries_1980_2020_MaxTemp.nc"
+file_output = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/tmax/daily_year_"
+cdo.splityearmon(input=file_input, output=file_output)
+
+file_input = "/home/climatedata/obs/CRESPI/daily_1km/DailySeries_1980_2020_MinTemp.nc"
+file_output = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/tmin/daily_year_"
+cdo.splityearmon(input=file_input, output=file_output)
+
+file_input = "/home/climatedata/obs/CRESPI/daily_1km/DailySeries_1980_2020_Prec.nc"
+file_output = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/prec/daily_year_"
+cdo.splityearmon(input=file_input, output=file_output)
+
+```
+
+
+
+# reproject
+
+```{r}
+
+
+f_reproj <- function(path_in, path_out, varname, unit){
+  
+  files_in <- dir_ls(path_in)
+  dir_create(path_out)
+  
+  for(i in seq_along(files_in)){
+    
+    fn_in <- files_in[i]
+    fn_out <- path(path_out, path_file(fn_in))
+    
+    rr <- rast(fn_in)
+    
+    rr_lonlat <- project(rr, "EPSG:4326")
+    # plot(rr_lonlat)
+    # time(rr_lonlat)
+    fn_in %>% 
+      path_file() %>% 
+      path_ext_remove() %>% 
+      stringr::str_remove("daily_year_") %>% 
+      paste0("01") %>% 
+      ymd() -> date_start
+    
+    time(rr_lonlat) <- date_start + days(0:(nlyr(rr) - 1))
+    
+    # names(rr_lonlat)
+    
+    writeCDF(rr_lonlat,
+             filename = fn_out, 
+             varname = varname, unit = unit, overwrite = TRUE)
+    
+    
+    # clean attributes
+    
+    ncobj <- open.nc(fn_out, write = T)
+    # att.get.nc(ncobj, "time", "calendar")
+    att.get.nc(ncobj, varname, "grid_mapping")
+    att.delete.nc(ncobj, varname, "grid_mapping")
+    close.nc(ncobj)
+    
+    
+  }
+  
+}
+
+
+path_in <- "/home/climatedata/obs/CRESPI/daily_1km_lonlat/tmax/"
+path_out <- "/home/climatedata/obs/CRESPI/daily_1km_lonlat/tmax-ll/"
+
+f_reproj(path_in = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/tmax/",
+         path_out = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/tmax-ll/",
+         varname = "temperature",
+         unit = "C")
+
+f_reproj(path_in = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/tmin/",
+         path_out = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/tmin-ll/",
+         varname = "temperature",
+         unit = "C")
+
+f_reproj(path_in = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/prec/",
+         path_out = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/prec-ll/",
+         varname = "precipitation",
+         unit = "mm")
+
+
+```
+
+
+
+# mergetime
+
+
+```{python}
+
+file_input = glob.glob("/home/climatedata/obs/CRESPI/daily_1km_lonlat/prec-ll/daily_year_*")
+file_output = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/DailySeries_1980_2018_Prec.nc"
+cdo.mergetime(input=file_input, output=file_output, options="--reduce_dim")
+
+file_input = glob.glob("/home/climatedata/obs/CRESPI/daily_1km_lonlat/tmax-ll/daily_year_*")
+file_output = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/DailySeries_1980_2018_MaxTemp.nc"
+cdo.mergetime(input=file_input, output=file_output, options="--reduce_dim")
+
+file_input = glob.glob("/home/climatedata/obs/CRESPI/daily_1km_lonlat/tmin-ll/daily_year_*")
+file_output = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/DailySeries_1980_2018_MinTemp.nc"
+cdo.mergetime(input=file_input, output=file_output, options="--reduce_dim")
+
+```
+
