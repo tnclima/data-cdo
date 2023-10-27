@@ -1,0 +1,193 @@
+---
+title: "prep data for toposcale: remap lonlat (w crop), mergetime, mergevars"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+library(eurocordexr)
+library(fs)
+library(magrittr)
+library(lubridate)
+library(data.table)
+setDTthreads(4)
+```
+
+```{python}
+import os
+import glob
+from cdo import Cdo
+cdo = Cdo()
+```
+
+
+# remap lonlat and crop
+
+
+```{python}
+
+
+file_coords = "/home/michael.matiu/projects/downscaling/data/coords_tnaa.txt"
+
+
+# other vars
+path_in = "/home/climatedata/temp-topo/all-vars-v01/"
+path_out = "/home/climatedata/downscaling/rcm_lonlat_tnaa_topo/split/"
+
+all_files = glob.glob(path_in + "*.nc")
+all_files.sort()
+
+for j,file_in in enumerate(all_files):
+  
+    file_out = os.path.join(path_out, os.path.basename(file_in))
+    cdo.remapbil(file_coords, input=file_in, output=file_out)
+
+```
+
+
+
+# mergetime 
+
+```{r}
+
+path_in <- "/home/climatedata/downscaling/rcm_lonlat_tnaa_topo/split/"
+path_out <- "/home/climatedata/downscaling/rcm_lonlat_tnaa_topo/merged-01-time/"
+
+dat_inv <- get_inventory(path_in)
+# dat_inv$variable %>% table
+# dat_inv <- dat_inv[variable != "orog"]
+check_inventory(dat_inv)
+
+dat_inv[, period := paste0(format(date_start, "%Y%m%d"), "-", format(date_end, "%Y%m%d"))]
+
+for(i in 1:nrow(dat_inv)){
+  
+  dat_i <- dat_inv[i]
+  file_out <- path(path_out, 
+                   # dat_i$variable,
+                   dat_i[, paste(variable, domain, gcm, experiment, ensemble, institute_rcm,
+                                 downscale_realisation, timefreq, period,
+                                 sep = "_")],
+                   ext = "nc")
+  
+  if(file_exists(file_out)) next
+  
+  # dir_create(path_dir(file_out))
+  
+  files_in <- dat_i$list_files[[1]]
+  
+  cdo_call <- paste0("cdo mergetime ",
+                     paste0(files_in, collapse = " "), " ",
+                     file_out)
+  
+  system(cdo_call)
+  
+  
+}
+
+
+```
+
+
+
+# mergevars
+
+
+```{r}
+
+path_in <- "/home/climatedata/downscaling/rcm_lonlat_tnaa_topo/merged-01-time/"
+path_out <- "/home/climatedata/downscaling/rcm_lonlat_tnaa_topo/merged-02-vars/"
+
+dat_inv <- get_inventory(path_in)
+# dat_inv$variable %>% table
+# dat_inv <- dat_inv[variable != "orog"]
+check_inventory(dat_inv)
+
+dat_inv[, period := paste0(format(date_start, "%Y%m%d"), "-", format(date_end, "%Y%m%d"))]
+
+dat_loop <- dat_inv[, .(gcm, institute_rcm, experiment, ensemble)] %>% unique
+
+for(i in 1:nrow(dat_loop)){
+  
+  dat_i <- merge(dat_inv, dat_loop[i], by = names(dat_loop))
+  file_out <- path(path_out, 
+                   # dat_i$variable,
+                   dat_i[1,
+                         paste("ALL", domain, gcm, experiment, ensemble, institute_rcm,
+                               downscale_realisation, timefreq, period,
+                               sep = "_")],
+                   ext = "nc")
+  
+  if(file_exists(file_out)) next
+  
+  # dir_create(path_dir(file_out))
+  
+  files_in <- unlist(dat_i$list_files)
+  
+  cdo_call <- paste0("cdo merge ",
+                     paste0(files_in, collapse = " "), " ",
+                     file_out)
+  
+  system(cdo_call)
+  
+  
+}
+```
+
+
+
+# merge hist and rcp
+
+
+```{r}
+
+path_in <- "/home/climatedata/downscaling/rcm_lonlat_tnaa_topo/merged-02-vars/"
+path_out <- "/home/climatedata/downscaling/rcm_lonlat_tnaa_topo/merged-03-histrcp/"
+
+dat_inv <- get_inventory(path_in)
+# dat_inv$variable %>% table
+# dat_inv <- dat_inv[variable != "orog"]
+check_inventory(dat_inv)
+
+
+dat_loop <- dat_inv[experiment != "historical", 
+                    .(variable, domain, gcm, institute_rcm, experiment, 
+                      ensemble, downscale_realisation, timefreq)] %>% unique
+
+for(i in 1:nrow(dat_loop)){
+  
+  dat_i_rcp <- merge(dat_inv, dat_loop[i], by = names(dat_loop))
+  dat_i_hist <- dat_inv[experiment == "historical"] %>% 
+    merge(dat_loop[i, -c("experiment")], by = names(dat_loop[i, -c("experiment")]))
+  dat_i <- rbind(dat_i_rcp, dat_i_hist)
+  
+  dat_i[, period := paste0(format(min(date_start), "%Y%m%d"), "-", 
+                           format(max(date_end), "%Y%m%d"))]
+  
+  file_out <- path(path_out, 
+                   # dat_i$variable,
+                   dat_i[experiment != "historical",
+                         paste("ALL", domain, gcm, experiment, ensemble, institute_rcm,
+                               downscale_realisation, timefreq, period,
+                               sep = "_")],
+                   ext = "nc")
+  
+  if(file_exists(file_out)) next
+  
+  # dir_create(path_dir(file_out))
+  
+  files_in <- unlist(dat_i$list_files)
+  
+  cdo_call <- paste0("cdo mergetime ",
+                     paste0(files_in, collapse = " "), " ",
+                     file_out)
+  
+  system(cdo_call)
+  
+  
+}
+
+```
+

@@ -1,0 +1,57 @@
+---
+title: "calculate climatologies Crespi 1km lonlat"
+output: html_document
+---
+
+```{python}
+import os
+import glob
+from cdo import Cdo
+cdo = Cdo()
+```
+
+
+# maxtemp
+
+
+```{python}
+
+file_input = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/DailySeries_1980_2020_MaxTemp.nc"
+file_output = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/Climatologies_1981_2010_MonthlyMaxTemp.nc"
+cdo.ymonmean(input="-selyear,1981/2010 "+file_input, output=file_output)
+file_output = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/Climatologies_1991_2020_MonthlyMaxTemp.nc"
+cdo.ymonmean(input="-selyear,1991/2020 "+file_input, output=file_output)
+
+```
+
+
+
+# mintemp
+
+
+```{python}
+
+file_input = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/DailySeries_1980_2020_MinTemp.nc"
+file_output = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/Climatologies_1981_2010_MonthlyMinTemp.nc"
+cdo.ymonmean(input="-selyear,1981/2010 "+file_input, output=file_output)
+file_output = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/Climatologies_1991_2020_MonthlyMinTemp.nc"
+cdo.ymonmean(input="-selyear,1991/2020 "+file_input, output=file_output)
+
+```
+
+
+
+
+# precip
+
+
+```{python}
+
+file_input = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/DailySeries_1980_2020_Prec.nc"
+file_output = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/Climatologies_1981_2010_MonthlyPrec.nc"
+cdo.ymonmean(input="-monsum -selyear,1981/2010 "+file_input, output=file_output)
+file_output = "/home/climatedata/obs/CRESPI/daily_1km_lonlat/Climatologies_1991_2020_MonthlyPrec.nc"
+cdo.ymonmean(input="-monsum -selyear,1991/2020 "+file_input, output=file_output)
+
+```
+

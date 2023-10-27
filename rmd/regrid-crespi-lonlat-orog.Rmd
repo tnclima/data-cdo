@@ -1,0 +1,57 @@
+---
+title: "reproject Crespi 1km elevation data set to lonlat"
+output: html_document
+date: "2023-10-12"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# library(reticulate)
+library(here)
+library(terra)
+# library(stars)
+library(RNetCDF)
+library(magrittr)
+library(lubridate)
+library(fs)
+```
+
+
+# reproject
+
+```{r}
+
+
+f_reproj <- function(fn_in, fn_out, varname = "orog", unit = "m"){
+  
+  rr <- rast(fn_in)
+  
+  rr_lonlat <- project(rr, "EPSG:4326")
+  
+  writeCDF(rr_lonlat,
+           filename = fn_out, 
+           varname = varname, unit = unit, overwrite = TRUE)
+  
+  
+  # clean attributes
+  
+  ncobj <- open.nc(fn_out, write = T)
+  # att.get.nc(ncobj, "time", "calendar")
+  att.get.nc(ncobj, varname, "grid_mapping")
+  att.delete.nc(ncobj, varname, "grid_mapping")
+  close.nc(ncobj)
+
+}
+
+
+f_reproj(fn_in = "/home/climatedata/obs/orography/crespi_1km_temperature.tif",
+         fn_out = "/home/climatedata/obs/orography/crespi_lonlat_1km_temperature.nc")
+
+f_reproj(fn_in = "/home/climatedata/obs/orography/crespi_1km_precipitation.tif",
+         fn_out = "/home/climatedata/obs/orography/crespi_lonlat_1km_precipitation.nc")
+
+
+```
+
+
+
