@@ -9,7 +9,7 @@ path_in = "/home/climatedata/cmip5/large-ensemble-monthly/merged/"
 path_out = "/home/climatedata/cmip5/large-ensemble-monthly/indices/"
 path_temp = "/home/climatedata/cmip5/large-ensemble-monthly/tmp/"
 
-variables = ["tas", "pr"]
+variables = ["tasmin", "tasmax"]
 
 os.makedirs(path_temp, exist_ok=True)
 tmp_merge_hist = os.path.join(path_temp, "tmp_merge_hist.nc")
