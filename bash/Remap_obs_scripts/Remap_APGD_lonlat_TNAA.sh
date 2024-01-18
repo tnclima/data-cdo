@@ -26,5 +26,5 @@ CDO_RESET_HISTORY=1 ;
 export CDO_RESET_HISTORY
 export REMAP_AREA_MIN=0.95
 
-cdo remapcon,$path_template $path_output/prova1.nc $path_output/pr_APGD.nc
+cdo remapcon,$path_template $path_output/prova1.nc $path_output/pr_apgd.nc
 
