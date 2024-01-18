@@ -9,20 +9,9 @@ file_coords = "/home/climatedata/highlander/Daily_lonlat/coords_lonlat_var_xy.tx
 # file_coords = "/home/climatedata/highlander/Daily_lonlat/coords_lonlat_same_xy.txt"
 
 # orog
-# path_in = "/home/climatedata/highlander/Daily_lonlat/zz.nc"
-# path_out = "/home/climatedata/highlander/Daily_lonlat/zz_ll.nc"
-# os.makedirs(path_out, exist_ok=True)
-
-# all_files = os.listdir(path_in)
-# all_files.sort()
-
-# for j,file_loop in enumerate(all_files):
-
-  # file_in = os.path.join(path_in, file_loop)
-  # file_out = os.path.join(path_out, file_loop)
-  # file_in = "/home/climatedata/highlander/Daily_lonlat/zz.nc"
-  # file_out = "/home/climatedata/highlander/Daily_lonlat/zz_ll_fix.nc"
-  # cdo.remapbil(file_coords, input=file_in, output=file_out)
+file_in = "/home/climatedata/highlander/elevation.nc"
+file_out = "/home/climatedata/highlander/elevation_lonlat.nc"
+cdo.remapbil(file_coords, input=file_in, output=file_out)
 
 
 # other vars
