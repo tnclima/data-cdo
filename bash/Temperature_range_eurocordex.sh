@@ -8,7 +8,7 @@
 ##############################################################
 
 path_input='/home/climatedata/eurocordex2-full/merged';
-path_output='/home/climatedata/eurocoerdex2-full/indices';
+path_output='/home/climatedata/eurocordex2-full/indices';
 
 #################################################
 #basename $path_input/tasmax/ciao.nc
@@ -34,7 +34,7 @@ do
 		cdo sub $file_tasmax $file_tasmin $path_output/difference.nc
 		cdo yearmean $path_output/difference.nc $path_output/temperature-range_mean_annual/$filename_tasmax
 		cdo seasmean $path_output/difference.nc $path_output/temperature-range_mean_seasonal/$filename_tasmax
-		rm $path_output/temperature-range_mean_annual/difference.nc
+		rm $path_output/difference.nc
 	fi
 done
 
