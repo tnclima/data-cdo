@@ -1,0 +1,84 @@
+# reproject to lonlat from non CF-conform original grids
+
+library(terra)
+library(lubridate)
+library(ncdf4)
+library(RNetCDF)
+library(fs)
+library(magrittr)
+library(stringr)
+
+path_in <- "/home/climatedata/obs/METEOFRANCE/PRESCILIA/"
+path_out <- "/home/climatedata/obs/METEOFRANCE/01-lonlat/"
+path_temp <- path(path_out, "temp-daily")
+
+files_in <- dir_ls(path_in)
+
+for(i_fn in files_in){
+  
+  nc1 <- nc_open(i_fn)
+  
+  # mat_lon <- ncvar_get(nc1, "lon")
+  mat_x <- ncvar_get(nc1, "LAMBX")
+  mat_y <- ncvar_get(nc1, "LAMBY")
+  
+  i_year_str <- i_fn %>% 
+    path_file %>% 
+    path_ext_remove() %>% 
+    str_sub(start = -4)
+  
+  # times <- ncdf4.helpers::nc.get.time.series(nc1, "TM") %>% ymd()
+  times <- make_date(i_year_str) + ncvar_get(nc1, "time")
+  
+  
+  dir_create(path(path_out, "pr"))
+  dir_create(path(path_temp, "pr"))
+  
+  file_out_annual <- path(path_out, "pr", i_year_str, ext = "nc")
+  if(file_exists(file_out_annual)) next
+  
+  for(i_date in seq_along(times)){
+    
+    file_out <- path(path_temp, "pr", times[i_date], ext = "nc")
+    if(file_exists(file_out)) next
+    
+    rr_new <- rast(nrows = ncol(mat_x), ncols = nrow(mat_x), 
+                   xmin = min(mat_x), xmax = max(mat_x),
+                   ymin = min(mat_y), ymax = max(mat_y),
+                   nlyrs = 1, time = times[i_date],
+                   crs = "EPSG:27572")
+    
+    mat1 <- ncvar_get(nc1, "RR24H", start = c(1, 1, i_date), count = c(-1, -1, 1))
+    rr_new[] <- as.vector(mat1[,ncol(mat1):1])
+    
+    rr_new_ll <- project(rr_new, "EPSG:4326")
+    
+    writeCDF(rr_new_ll, 
+             file_out,
+             varname = "pr", unit = "kg m-2")
+    
+    ncobj <- open.nc(file_out, write = T)
+    # att.get.nc(ncobj, "time", "calendar")
+    # att.get.nc(ncobj, "pr", "grid_mapping")
+    att.delete.nc(ncobj, "pr", "grid_mapping")
+    close.nc(ncobj)
+    
+    
+  }
+  
+  
+  files_lonlat <- dir_ls(path(path_temp, "pr"))
+  
+  cdo_call <- str_c("cdo --no_history mergetime ",
+                    " ", str_flatten(files_lonlat, " "),
+                    " ", file_out_annual)
+  system(cdo_call)
+  
+  file_delete(files_lonlat)
+  
+  
+  
+}
+
+
+
