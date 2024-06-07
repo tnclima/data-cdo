@@ -9,14 +9,14 @@
 # 22th March, 2023
 ##############################################################
 
-path_input='/home/climatedata/obs/regrid_data_0.95/EOBS/v19HOM';
+path_input='/home/climatedata/obs/regrid_data_0.95/METEOFRANCE';
 path_output='/home/climatedata/obs/regrid_data_0.95/data_in_time/climate_indices';
-obs='v19HOM';
-name_file_dataset_Tmax='tx_ens_mean_0.1deg_GAR_reg_v19.0eHOM_rg.nc'
-name_file_dataset_Tmin='tn_ens_mean_0.1deg_GAR_reg_v19.0eHOM_rg.nc'
+obs='METEOFRANCE';
+name_file_dataset_Tmax='tasmax_rg.nc'
+name_file_dataset_Tmin='tasmin_rg.nc'
 
-first_year=1950;
-last_year=2018;
+first_year=1968;
+last_year=2021;
 
 #################################################
 #creation ofmaxe seasonal dataset:

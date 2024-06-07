@@ -12,13 +12,13 @@
 # 24th March, 2023
 ##############################################################
 
-path_input='/home/climatedata/obs/regrid_data_0.95/CRESPI';
+path_input='/home/climatedata/obs/regrid_data_0.95/METEOFRANCE';
 path_output='/home/climatedata/obs/regrid_data_0.95/data_in_time/climate_indices';
-obs='CRESPI';
-name_file_dataset='DailySeries_1980_2018_Prec_rg.nc'
+obs='METEOFRANCE';
+name_file_dataset='pr_rg.nc'
 variable='pr';
 
-first_year=1980;
+first_year=1958;
 last_year=2018;
 
 #################################################
@@ -79,7 +79,7 @@ fi
 rm $path_output/*daily*
 rm $path_output/*percentile*
 #############################################
-#Calculate the mean:
+#Merge all the years:
 
 if [ $obs == "v19HOM" ]; then
 
