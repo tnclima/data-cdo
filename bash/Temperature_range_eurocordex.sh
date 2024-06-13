@@ -7,13 +7,20 @@
 # 14 May, 2023
 ##############################################################
 
-path_input='/home/climatedata/eurocordex2-full/merged';
+path_input='/home/climatedata/eurocordex2-full/merged/merged_in_time';
 path_output='/home/climatedata/eurocordex2-full/indices';
 
 #################################################
-#basename $path_input/tasmax/ciao.nc
+#At first I need to merge the rcp with the correspondent historical
+#for historical_file in "${path_input}"/tasmax/*_historical_*
+#do
+#	file_name=$(basename "$historical_file")
+#	prefix=$(echo "$file_name" | sed -r 's|^(.*)_historical_([^_]+_[^_]+)_[0-9]{8}-[0-9]{8}.nc$|\1_\2|')
+#	echo $prefix
+#done
 
-#creation ofmaxe seasonal dataset:
+
+#Here, I can create the datasets based on the merged models:
 for file_tasmax in "$path_input"/tasmax/*
 do
 	echo "File corrente: $file_tasmax"
