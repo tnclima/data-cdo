@@ -8,8 +8,8 @@ cdo = Cdo()
 file_coords = "/home/michael.matiu/projects/downscaling/data/coords_tnaa.txt"
 
 # orog
-path_in = "/home/climatedata/eurocordex2-rest/orog/"
-path_out = "/home/climatedata/downscaling/rcm_lonlat_tnaa/orog/"
+path_in = "/home/climatedata/eurocordex3-reanalysis/orog/"
+path_out = "/home/climatedata/downscaling/rcm_lonlat_tnaa_eraint/orog/"
 os.makedirs(path_out, exist_ok=True)
 
 all_files = os.listdir(path_in)
@@ -23,8 +23,8 @@ for j,file_loop in enumerate(all_files):
 
 
 # other vars
-path_in = "/home/climatedata/eurocordex2-rest/merged/"
-path_out = "/home/climatedata/downscaling/rcm_lonlat_tnaa/"
+path_in = "/home/climatedata/eurocordex3-reanalysis/merged/"
+path_out = "/home/climatedata/downscaling/rcm_lonlat_tnaa_eraint/"
 
 variables = ["tas", "tasmin", "tasmax", "pr"]
 

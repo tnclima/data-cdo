@@ -34,11 +34,16 @@ rs_crop <- crop(rs, sp_ext_laea, filename = "/home/climatedata/dem/eu_dem_GAR.ti
 
 # resample to 1km ---------------------------------------------------------
 
+rs_crop <- rast("/home/climatedata/dem/eu_dem_GAR.tif")
 
 rs_crop_1km <- aggregate(rs_crop, 40, filename = "/home/climatedata/obs/orography/eu_dem_gar_1km.tif")
 
 rr_5km <- aggregate(rs_crop_1km, 5, filename = "/home/climatedata/obs/orography/eu_dem_gar_5km.tif")
 
 rr_10km <- aggregate(rs_crop_1km, 10, filename = "/home/climatedata/obs/orography/eu_dem_gar_10km.tif")
+
+rr_100m <- aggregate(rs_crop, 4, filename = "/home/climatedata/obs/orography/eu_dem_gar_100m.tif")
+rr_500m <- aggregate(rs_crop, 20, filename = "/home/climatedata/obs/orography/eu_dem_gar_500m.tif")
+
 
 

@@ -34,4 +34,10 @@ file_output = "/home/climatedata/downscaling/obs4rcm_lonlat_tnaa/orog_eobs.nc"
 cdo.remapcon(file_template, input=file_input, output=file_output)
 
 
+# eu-dem ----------------------------------------- #
+
+file_input = "/home/climatedata/obs/orography/eu_dem_gar_10km.nc"
+file_output = "/home/climatedata/downscaling/obs4rcm_lonlat_tnaa/orog_eudem.nc"
+cdo.remapcon(file_template, input=file_input, output=file_output)
+
 
