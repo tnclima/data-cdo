@@ -49,10 +49,10 @@ do
 			rm $path_output/JF_${year}.nc
 			rm $path_output/D_${year_prec}.nc
 		fi
-		cdo -timsum -gtc,1 -mergetime $path_output/DJF_${year}* $path_output/RR1_DJF_${year}.nc
-		cdo -timsum -gtc,1 -mergetime $path_output/MAM_${year}* $path_output/RR1_MAM_${year}.nc
-		cdo -timsum -gtc,1 -mergetime $path_output/JJA_${year}* $path_output/RR1_JJA_${year}.nc
-		cdo -timsum -gtc,1 -mergetime $path_output/SON_${year}* $path_output/RR1_SON_${year}.nc
+		cdo -timsum -gtc,1 $path_output/DJF_${year}.nc $path_output/RR1_DJF_${year}.nc
+		cdo -timsum -gtc,1 $path_output/MAM_${year}.nc $path_output/RR1_MAM_${year}.nc
+		cdo -timsum -gtc,1 $path_output/JJA_${year}.nc $path_output/RR1_JJA_${year}.nc
+		cdo -timsum -gtc,1 $path_output/SON_${year}.nc $path_output/RR1_SON_${year}.nc
 
 	done
 
