@@ -11,7 +11,7 @@ path_in = "/home/climatedata/eurocordex2-full/merged/"
 path_out = "/home/climatedata/eurocordex2-full/merged/merged_in_time/"
 path_temp = "/home/climatedata/eurocordex2-full/tmp/"
 
-variables = ["rlus","rsds","rsus"]
+variables = ["hfls","hfss"]
 
 for var in variables:
 
