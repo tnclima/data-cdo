@@ -44,9 +44,21 @@ do
         rm $path_output/pr_45.nc
         rm $path_output/pr_85.nc
 
+	#R10
+        cdo -timsum -gtc,10 -selyear,${year} $path_input/pr_rcp45_1981-2070_cmcc2km_tn.nc $path_output/pr_45.nc
+        cdo -timsum -gtc,10 -selyear,${year} $path_input/pr_rcp85_1981-2070_cmcc2km_tn.nc $path_output/pr_85.nc
+        cdo -setattribute,R10@units="" -chname,pr,R10 $path_output/pr_45.nc $path_output/R10_rcp45_${year}.nc
+        cdo -setattribute,R10@units="" -chname,pr,R10 $path_output/pr_85.nc $path_output/R10_rcp85_${year}.nc
+        rm $path_output/pr_45.nc
+        rm $path_output/pr_85.nc
+
         #Rx1day
         cdo -yearmax -selyear,${year} $path_input/pr_rcp45_1981-2070_cmcc2km_tn.nc $path_output/Rx1day_rcp45_${year}.nc
         cdo -yearmax -selyear,${year} $path_input/pr_rcp85_1981-2070_cmcc2km_tn.nc $path_output/Rx1day_rcp85_${year}.nc
+
+	#Rx5day
+        cdo -yearmax -runsum,5 -selyear,${year} $path_input/pr_rcp45_1981-2070_cmcc2km_tn.nc $path_output/Rx5day_rcp45_${year}.nc
+	cdo -yearmax -runsum,5 -selyear,${year} $path_input/pr_rcp85_1981-2070_cmcc2km_tn.nc $path_output/Rx5day_rcp85_${year}.nc
 
 	#TR
 	cdo -timsum -gtc,20 -selyear,${year} $path_input/tasmin_rcp45_1981-2070_cmcc2km_tn.nc $path_output/tasmin_45.nc
@@ -64,6 +76,14 @@ do
         rm $path_output/tasmax_45.nc
         rm $path_output/tasmax_85.nc
 
+	#FD
+        cdo -timsum -ltc,0 -selyear,${year} $path_input/tasmin_rcp45_1981-2070_cmcc2km_tn.nc $path_output/tasmin_45.nc
+        cdo -timsum -ltc,0 -selyear,${year} $path_input/tasmin_rcp85_1981-2070_cmcc2km_tn.nc $path_output/tasmin_85.nc
+        cdo -setattribute,FD@units="" -chname,tasmin,FD $path_output/tasmin_45.nc $path_output/FD_rcp45_${year}.nc
+        cdo -setattribute,FD@units="" -chname,tasmin,FD $path_output/tasmin_85.nc $path_output/FD_rcp85_${year}.nc
+        rm $path_output/tasmin_45.nc
+        rm $path_output/tasmin_85.nc
+
 	#SU30
         cdo -timsum -gtc,30 -selyear,${year} $path_input/tasmax_rcp45_1981-2070_cmcc2km_tn.nc $path_output/tasmax_45.nc
         cdo -timsum -gtc,30 -selyear,${year} $path_input/tasmax_rcp85_1981-2070_cmcc2km_tn.nc $path_output/tasmax_85.nc
@@ -72,6 +92,7 @@ do
         rm $path_output/tasmax_45.nc
         rm $path_output/tasmax_85.nc
 
+         #SU
         cdo -timsum -gtc,25 -selyear,${year} $path_input/tasmax_rcp45_1981-2070_cmcc2km_tn.nc $path_output/tasmax_45.nc
         cdo -timsum -gtc,25 -selyear,${year} $path_input/tasmax_rcp85_1981-2070_cmcc2km_tn.nc $path_output/tasmax_85.nc
         cdo -setattribute,SU@units="" -chname,tasmax,SU $path_output/tasmax_45.nc $path_output/SU_rcp45_${year}.nc
@@ -101,10 +122,20 @@ cdo mergetime $path_output/R20_rcp85_* $path_output/R20_1981-2070_rcp85_cmcc2km_
 rm $path_output/R20_rcp45_*
 rm $path_output/R20_rcp85_*
 
+cdo mergetime $path_output/R10_rcp45_* $path_output/R10_1981-2070_rcp45_cmcc2km_tn.nc
+cdo mergetime $path_output/R10_rcp85_* $path_output/R10_1981-2070_rcp85_cmcc2km_tn.nc
+rm $path_output/R10_rcp45_*
+rm $path_output/R10_rcp85_*
+
 cdo mergetime $path_output/Rx1day_rcp45_* $path_output/Rx1day_1981-2070_rcp45_cmcc2km_tn.nc
 cdo mergetime $path_output/Rx1day_rcp85_* $path_output/Rx1day_1981-2070_rcp85_cmcc2km_tn.nc
 rm $path_output/Rx1day_rcp45_*
 rm $path_output/Rx1day_rcp85_*
+
+cdo mergetime $path_output/Rx5day_rcp45_* $path_output/Rx5day_1981-2070_rcp45_cmcc2km_tn.nc
+cdo mergetime $path_output/Rx5day_rcp85_* $path_output/Rx5day_1981-2070_rcp85_cmcc2km_tn.nc
+rm $path_output/Rx5day_rcp45_*
+rm $path_output/Rx5day_rcp85_*
 
 cdo mergetime $path_output/TR_rcp45_* $path_output/TR_1981-2070_rcp45_cmcc2km_tn.nc
 cdo mergetime $path_output/TR_rcp85_* $path_output/TR_1981-2070_rcp85_cmcc2km_tn.nc
@@ -115,6 +146,11 @@ cdo mergetime $path_output/ID_rcp45_* $path_output/ID_1981-2070_rcp45_cmcc2km_tn
 cdo mergetime $path_output/ID_rcp85_* $path_output/ID_1981-2070_rcp85_cmcc2km_tn.nc
 rm $path_output/ID_rcp45_*
 rm $path_output/ID_rcp85_*
+
+cdo mergetime $path_output/FD_rcp45_* $path_output/FD_1981-2070_rcp45_cmcc2km_tn.nc
+cdo mergetime $path_output/FD_rcp85_* $path_output/FD_1981-2070_rcp85_cmcc2km_tn.nc
+rm $path_output/FD_rcp45_*
+rm $path_output/FD_rcp85_*
 
 cdo mergetime $path_output/SU30_rcp45_* $path_output/SU30_1981-2070_rcp45_cmcc2km_tn.nc
 cdo mergetime $path_output/SU30_rcp85_* $path_output/SU30_1981-2070_rcp85_cmcc2km_tn.nc
