@@ -11,7 +11,7 @@ file_template = "/home/climatedata/obs/regrid_data_0.95/template_rotpole_eurocor
 path_in = "/home/climatedata/temp-eur11/"
 path_out = "/home/climatedata/eurocordex2-full/split/"
 
-variables = ["clt", "rsds", "rsus", "rlds", "rlus"]
+variables = ["hfls", "hfss"]
 
 
 for i_var in variables:

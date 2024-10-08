@@ -6,3 +6,4 @@
 temp/
 *.Rout
 *.log
+.spyproject/
