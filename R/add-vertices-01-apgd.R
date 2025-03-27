@@ -5,11 +5,11 @@ library(magrittr)
 source("R/functions/calc_vertices.R")
 
 
-fs::file_copy("/home/climatedata/obs/APGDv2/APGD_laea.nc",
-              "/home/climatedata/obs/APGDv2/APGD_laea_vertices.nc", 
+fs::file_copy("/home/climatedata/obs/APGDv2/APGDv2_laea.nc",
+              "/home/climatedata/obs/APGDv2/APGDv2_laea_vertices.nc", 
               overwrite = T)
 
-nc_apgd <- nc_open("/home/climatedata/obs/APGDv2/APGD_laea_vertices.nc", write = T)
+nc_apgd <- nc_open("/home/climatedata/obs/APGDv2/APGDv2_laea_vertices.nc", write = T)
 # for cleaner printing
 ncatt_get(nc_apgd, 0)
 ncatt_put(nc_apgd, 0, "history", "")

@@ -174,8 +174,8 @@ for j,file_loop in enumerate(all_files_rcm_loop):
     file_in = tmp_merge_hist
 
     # skip rest of loop if last file exists
-    # if os.path.exists(os.path.join(path_out, "R20mm_annual", file_rcm)):
-    #   continue    
+    if os.path.exists(os.path.join(path_out, "R20mm_annual", file_rcm)):
+      continue    
 
     cdo.mergetime(input=file_hist + " " + file_rcp, output=tmp_merge_hist)
 
