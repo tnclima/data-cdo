@@ -16,7 +16,7 @@ library(ncdf4)
 library(magrittr)
 
 # resolution
-nc_obj <- nc_open("/home/climatedata/temp-cmcc-dds/vhr-pro/huss/huss_historical_1981_cmcc2km_tn.nc")
+nc_obj <- nc_open("/home/climatedata/CMCC_COSMO_2km/vhr-pro-tnaa/huss/huss_historical_1981.nc")
 ncvar_get(nc_obj, "rlon") %>% diff %>% round(3) %>% table
 ncvar_get(nc_obj, "rlat") %>% diff %>% round(3) %>% table
 # -> res: 0.02
@@ -47,7 +47,7 @@ file_content <- paste0(
   "yinc = ", res, "\n"
 )
 cat(file_content)
-cat(file_content, file = "/home/climatedata/climate_scenarios_appa/dati_spaziotemporali/vhr-pro-it-2km_orario/coords_lonlat_same_xy_0.02.txt")
+cat(file_content, file = "/home/climatedata/CMCC_COSMO_2km/coords4cdo/coords_lonlat_same_xy_0.02.txt")
 
 
 
@@ -58,8 +58,8 @@ cat(file_content, file = "/home/climatedata/climate_scenarios_appa/dati_spaziote
 mat_lat %>% apply(1, diff) %>% as.vector %>% summary # -> y 0.02 ok
 res_y <- 0.02
 
-mat_lon %>% apply(2, diff) %>% as.vector %>% summary # -> between 0.0284 and 0.2911
-# mat_lon %>% apply(2, diff) %>% as.vector %>% hist(50) # -> between 0.0284 and 0.2911
+mat_lon %>% apply(2, diff) %>% as.vector %>% summary # -> between 0.0284 and 0.2942
+# mat_lon %>% apply(2, diff) %>% as.vector %>% hist(50) # -> between 0.0284 and 0.2942
 res_x <- mat_lon %>% apply(2, diff) %>% as.vector %>% mean %>% round(3)
 
 
@@ -73,5 +73,5 @@ file_content <- paste0(
   "yinc = ", res_y, "\n"
 )
 cat(file_content)
-cat(file_content, file = "/home/climatedata/climate_scenarios_appa/dati_spaziotemporali/vhr-pro-it-2km_orario/coords_lonlat_var_x0.029_y0.02.txt")
+cat(file_content, file = "/home/climatedata/CMCC_COSMO_2km/coords4cdo/coords_lonlat_var_x0.029_y0.02.txt")
 
