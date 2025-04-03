@@ -7,7 +7,7 @@ from cdo import Cdo
 cdo = Cdo()
 
 path_in = "/home/climatedata/obs/ALPINE-TST/daily_1km_lonlat/"
-path_out = "/home/climatedata/obs/ALPINE-TST/clim_1km_lonlat/"
+path_out = "/home/climatedata/obs/ALPINE-TST/clim_1km_lonlat/monthly/"
 
 all_files = os.listdir(path_in)
 all_files.sort()

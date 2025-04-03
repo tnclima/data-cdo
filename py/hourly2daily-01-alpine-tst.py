@@ -73,25 +73,26 @@ if not os.path.exists(file_output):
 
 
 
-# for prec, first mergetime because of 8-8 UTC
-# check only last file
-if not os.path.exists(os.path.join(path_out, "ALPINE-TST-1km_prec-8h-8h_19910102-20210731.nc")):
-  
-  file_prec_merged = os.path.join(path_tmp, "prec_merged.nc")
+
+# for prec, first mergetime because of 8-8 UTC (and other stuff)
+file_prec_merged = "/home/climatedata/obs/ALPINE-TST/hourly_prec_1km_lonlat_merged/ALPINE-TST-1km_hourly_prec_19910101-20210731.nc"
+if not os.path.exists(file_prec_merged):
   file_input = glob.glob(os.path.join(path_in_prec, "*"))
   cdo.mergetime(input=file_input, output=file_prec_merged)
   
-  # prec0-0
-  file_output = os.path.join(path_out, "ALPINE-TST-1km_prec-0h-0h_19910101-20210731.nc")
+
+# prec0-0
+file_output = os.path.join(path_out, "ALPINE-TST-1km_prec-0h-0h_19910101-20210731.nc")
+if not file_output:
   cdo.daysum(input=file_prec_merged, output=file_output)
   
-  
-  # prec8-8 (as crespi)
+# prec8-8 (as crespi)
+file_output = os.path.join(path_out, "ALPINE-TST-1km_prec-8h-8h_19910102-20210731.nc")
+if not file_output:
   file_prec_merged_shifted_daysum = os.path.join(path_tmp, "prec_merged_shifted_daysum.nc")
-  cdo.daysum(input=" -shifttime,+8hour " + file_prec_merged, 
+  cdo.daysum(input=" -shifttime,+16hour " + file_prec_merged, 
              output=file_prec_merged_shifted_daysum)
   
-  file_output = os.path.join(path_out, "ALPINE-TST-1km_prec-8h-8h_19910102-20210731.nc")
   cdo.delete("timestep=1,11171", 
              input=file_prec_merged_shifted_daysum, 
              output=file_output)
