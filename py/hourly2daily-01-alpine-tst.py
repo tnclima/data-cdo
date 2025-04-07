@@ -83,12 +83,12 @@ if not os.path.exists(file_prec_merged):
 
 # prec0-0
 file_output = os.path.join(path_out, "ALPINE-TST-1km_prec-0h-0h_19910101-20210731.nc")
-if not file_output:
+if not os.path.exists(file_output):
   cdo.daysum(input=file_prec_merged, output=file_output)
   
 # prec8-8 (as crespi)
 file_output = os.path.join(path_out, "ALPINE-TST-1km_prec-8h-8h_19910102-20210731.nc")
-if not file_output:
+if not os.path.exists(file_output):
   file_prec_merged_shifted_daysum = os.path.join(path_tmp, "prec_merged_shifted_daysum.nc")
   cdo.daysum(input=" -shifttime,+16hour " + file_prec_merged, 
              output=file_prec_merged_shifted_daysum)

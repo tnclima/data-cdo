@@ -2,6 +2,7 @@
 
 import os
 import glob
+import re
 from cdo import Cdo
 
 cdo = Cdo()
@@ -15,7 +16,8 @@ all_files.sort()
 for file in all_files:
 
   file_input = " -selyear,1991/2020 " + os.path.join(path_in, file)
-  file_output = os.path.join(path_out, file.replace("19910101-20210731", "1991-2020"))
+  file_output = os.path.join(path_out,
+                             re.sub(r"1981010.-20231231", "1991-2020", file))
   if not os.path.exists(file_output):
     if "prec" in file:
       cdo.ymonmean(input= " -monsum " + file_input, output=file_output)

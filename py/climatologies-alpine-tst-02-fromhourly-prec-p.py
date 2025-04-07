@@ -26,16 +26,16 @@ if not os.path.exists(file_out999):
   
   file_tmp_min = os.path.join(path_tmp, "tmp_min.nc")
   file_tmp_max = os.path.join(path_tmp, "tmp_max.nc")
-  cdo.timmin(input=file_input, output=file_tmp_min)
-  cdo.timmax(input=file_input, output=file_tmp_max)
+  cdo.yseasmin(input=file_input, output=file_tmp_min)
+  cdo.yseasmax(input=file_input, output=file_tmp_max)
   
-  cdo.seaspctl(95, 
+  cdo.yseaspctl(95, 
               input=file_input+" "+file_tmp_min+" "+file_tmp_max, 
               output=file_out95)
-  cdo.seaspctl(99, 
+  cdo.yseaspctl(99, 
               input=file_input+" "+file_tmp_min+" "+file_tmp_max, 
               output=file_out99)
-  cdo.seaspctl(99.9, 
+  cdo.yseaspctl(99.9, 
               input=file_input+" "+file_tmp_min+" "+file_tmp_max, 
               output=file_out999)
 
